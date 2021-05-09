@@ -1,12 +1,14 @@
 package main
 
 import (
-	// "context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"math"
 	"net/http"
 	"os"
+	"sort"
+	"time"
 
 	"github.com/dghubble/go-twitter/twitter"
 	"github.com/dghubble/oauth1"
@@ -61,7 +63,6 @@ func getData() {
 	if err != nil {
 		fmt.Println("Error while reading the response bytes:", err)
 	}
-	// fmt.Println(string([]byte(body)))
 	data := []byte(body)
 
 	jsonFile, _ := os.Create("vaccinations_regions.json")
@@ -87,21 +88,32 @@ func getData() {
 		fmt.Println(err)
 	}
 
-	total_vacs := make(map[string]int)
-	total_people_vac := make(map[string]int)
-	total_people_vac_fully := make(map[string]int)
+	total_vacs := make(map[time.Time]int)
+	total_people_vac := make(map[time.Time]int)
+	total_people_vac_fully := make(map[time.Time]int)
+	population_of_gr := 8868536
+	var percentage_1st_dose []float64
+	var percentage_2nd_dose []float64
+
 	for _, elem := range allData {
-		total_vacs[elem.ReferenceDate] += elem.TotalVaccinations
-		total_people_vac[elem.ReferenceDate] += elem.TotalDistinctPersons
-		total_people_vac_fully[elem.ReferenceDate] = total_vacs[elem.ReferenceDate] - total_people_vac[elem.ReferenceDate]
+		date := elem.ReferenceDate[0:10]
+		parsed_date, _ := time.Parse("2006-01-02", date)
+		// fmt.Println(parsed_date)
+		total_vacs[parsed_date] += elem.TotalVaccinations
+		total_people_vac[parsed_date] += elem.TotalDistinctPersons
+		total_people_vac_fully[parsed_date] = total_vacs[parsed_date] - total_people_vac[parsed_date]
+
+		perc := (float64(total_people_vac[parsed_date]) / float64(population_of_gr)) * 100
+		percentage_1st_dose = append(percentage_1st_dose, math.Round(perc*100)/100)
+		perc2 := (float64(total_people_vac_fully[parsed_date]) / float64(population_of_gr)) * 100
+		percentage_2nd_dose = append(percentage_2nd_dose, math.Round(perc2*100)/100)
 	}
 
-	fmt.Println(total_vacs)
-	fmt.Println(total_people_vac)
-	fmt.Println(total_people_vac_fully)
-	// total_vacs = { "01/05/2021" 50}
-	// total_people_vac = { "01/05/2021" 120}
-	// total_people_vac_fully = { "01/05/2021" 2423423423}
+	sort.Slice(percentage_1st_dose, func(i, j int) bool { return percentage_1st_dose[i] < percentage_1st_dose[j] })
+	sort.Slice(percentage_2nd_dose, func(i, j int) bool { return percentage_2nd_dose[i] < percentage_2nd_dose[j] })
+	// get last item
+	fmt.Println(percentage_1st_dose[len(percentage_1st_dose)-1])
+	fmt.Println(percentage_2nd_dose[len(percentage_2nd_dose)-1])
 }
 
 func main() {
