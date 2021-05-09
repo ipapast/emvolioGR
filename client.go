@@ -86,45 +86,45 @@ func getData() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	
-	fmt.Println(allData)
 
-	for i := range allData {
-		fmt.Println(allData[i].ReferenceDate)
-
+	total_vacs := make(map[string]int)
+	total_people_vac := make(map[string]int)
+	total_people_vac_fully := make(map[string]int)
+	for _, elem := range allData {
+		total_vacs[elem.ReferenceDate] += elem.TotalVaccinations
+		total_people_vac[elem.ReferenceDate] += elem.TotalDistinctPersons
+		total_people_vac_fully[elem.ReferenceDate] = total_vacs[elem.ReferenceDate] - total_people_vac[elem.ReferenceDate]
 	}
 
-	// map = { "01/05/2021": {totalpeople: "50", totalVaccs: "120" }
-
-	// dataMap := make(map[string]struct{})
-	// for k, _ := range allData {
-	// 	dataMap["k"]
-	// 	fmt.Printf("key[%s] \n", k)
-	// }
-
+	fmt.Println(total_vacs)
+	fmt.Println(total_people_vac)
+	fmt.Println(total_people_vac_fully)
+	// total_vacs = { "01/05/2021" 50}
+	// total_people_vac = { "01/05/2021" 120}
+	// total_people_vac_fully = { "01/05/2021" 2423423423}
 }
 
 func main() {
 	getData()
 
-		creds := Credentials{
-			AccessToken:       os.Getenv("ACCESS_TOKEN"),
-			AccessTokenSecret: os.Getenv("ACCESS_TOKEN_SECRET"),
-			ConsumerKey:       os.Getenv("CONSUMER_KEY"),
-			ConsumerSecret:    os.Getenv("CONSUMER_SECRET"),
-		}
+	creds := Credentials{
+		AccessToken:       os.Getenv("ACCESS_TOKEN"),
+		AccessTokenSecret: os.Getenv("ACCESS_TOKEN_SECRET"),
+		ConsumerKey:       os.Getenv("CONSUMER_KEY"),
+		ConsumerSecret:    os.Getenv("CONSUMER_SECRET"),
+	}
 
-		fmt.Printf("%+v\n", creds)
+	fmt.Printf("%+v\n", creds)
 
-		client, err := getClient(&creds)
-		if err != nil {
-			fmt.Println("Error getting Twitter Client")
-			fmt.Println(err)
-		}
-		tweet, resp, err := client.Statuses.Update("A Test Tweet", nil)
-		if err != nil {
-			fmt.Println(err)
-		}
-		fmt.Printf("%+v\n", resp)
-		fmt.Printf("%+v\n", tweet)
+	client, err := getClient(&creds)
+	if err != nil {
+		fmt.Println("Error getting Twitter Client")
+		fmt.Println(err)
+	}
+	tweet, resp, err := client.Statuses.Update("A Test Tweet", nil)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Printf("%+v\n", resp)
+	fmt.Printf("%+v\n", tweet)
 }
