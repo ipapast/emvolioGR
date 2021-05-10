@@ -1,6 +1,7 @@
 # emvolioGR
 
-![github check](https://github.com/ipapast/emvolioGR/actions/workflows/go.yml/badge.svg)
+![github check](https://github.com/ipapast/emvolioGR/actions/workflows/go.yml/badge.svg) [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
+
 
 _Work in progress._
 
