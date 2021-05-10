@@ -43,8 +43,6 @@ func getClient(creds *Credentials) (*twitter.Client, error) {
 }
 
 func getData() {
-	fmt.Println("Getting data...")
-
 	url := "https://data.gov.gr/api/v1/query/mdg_emvolio"
 	gov_token := os.Getenv("GOV_DATA_TOKEN")
 
@@ -72,8 +70,6 @@ func getData() {
 	if err2 != nil {
 		fmt.Println(err2)
 	}
-	fmt.Println("Done writing to file")
-
 	type DataPerArea struct {
 		ReferenceDate        string `json:"referencedate"`
 		TotalVaccinations    int    `json:"totalvaccinations"`
@@ -98,7 +94,6 @@ func getData() {
 	for _, elem := range allData {
 		date := elem.ReferenceDate[0:10]
 		parsed_date, _ := time.Parse("2006-01-02", date)
-		// fmt.Println(parsed_date)
 		total_vacs[parsed_date] += elem.TotalVaccinations
 		total_people_vac[parsed_date] += elem.TotalDistinctPersons
 		total_people_vac_fully[parsed_date] = total_vacs[parsed_date] - total_people_vac[parsed_date]
@@ -112,13 +107,59 @@ func getData() {
 	sort.Slice(percentage_1st_dose, func(i, j int) bool { return percentage_1st_dose[i] < percentage_1st_dose[j] })
 	sort.Slice(percentage_2nd_dose, func(i, j int) bool { return percentage_2nd_dose[i] < percentage_2nd_dose[j] })
 	// get last item
-	fmt.Println(percentage_1st_dose[len(percentage_1st_dose)-1])
-	fmt.Println(percentage_2nd_dose[len(percentage_2nd_dose)-1])
+	latest_1st_dose := (percentage_1st_dose[len(percentage_1st_dose)-1])
+	latest_2nd_dose := (percentage_2nd_dose[len(percentage_2nd_dose)-1])
+
+	stringToTweet := ""
+	stringToTweet += AddDataToTweet(latest_1st_dose, "1st dose of vaccine progress in Greece: \n\n")
+	stringToTweet += AddDataToTweet(latest_2nd_dose, "2nd dose of vaccine progress in Greece: \n\n")
+	stringToTweetGR := ""
+	stringToTweetGR += AddDataToTweet(latest_1st_dose, "Ποσοστό ατόμων με 1η δόση εμβολίου: \n\n")
+	stringToTweetGR += AddDataToTweet(latest_2nd_dose, "Ποσοστό ατόμων με 2η δόση εμβολίου: \n\n")
+	SourceAndSendTweet(stringToTweet, "en")
+	SourceAndSendTweet(stringToTweetGR, "gr")
+	
+
 }
 
-func main() {
-	getData()
+func AddDataToTweet(dataValue float64, textValue string) string {
+	// bar_total is 15 and a new bar is every 6.67%
+	dataToAdd := ""
+	solid_bars_to_print := math.Round(dataValue / 6.67)
+	empty_bars_to_print := 15 - int(solid_bars_to_print)
 
+	dataToAdd += textValue
+	for solid_bars_to_print > 0 {
+		dataToAdd += "▓"
+		solid_bars_to_print -=1
+	}
+	for empty_bars_to_print > 0 {
+		dataToAdd += "░"
+		empty_bars_to_print -= 1
+	}
+	dataToAdd += " " + fmt.Sprint(dataValue) + "%\n\n"
+	return dataToAdd
+}
+
+func SourceAndSendTweet(stringToTweet, language string){
+	now := time.Now()
+	date := fmt.Sprint(now.Format("02/01/2006"))
+	
+	if language == "en" {	
+		stringToTweet += "As of " + date + "\n"
+		stringToTweet += "With data from the GR Gov API\n"
+		stringToTweet += "#koronoios #covid19GR #CovidGR #emvolio #COVID19 #CoronavirusVaccine"
+		fmt.Println(stringToTweet)
+	} else {
+		stringToTweet += "Εώς " + date + "\n"
+		stringToTweet += "Με δεδομένα από το GR Gov API \n"
+		stringToTweet += "#emvolio #covid #COVID19gr #κορονοϊός #εμβόλιο #εμβολιασμος #κορωνοιος"
+		fmt.Println(stringToTweet)
+	}
+	sendTweet(stringToTweet)
+}
+
+func sendTweet(stringToTweet string){
 	creds := Credentials{
 		AccessToken:       os.Getenv("ACCESS_TOKEN"),
 		AccessTokenSecret: os.Getenv("ACCESS_TOKEN_SECRET"),
@@ -133,10 +174,15 @@ func main() {
 		fmt.Println("Error getting Twitter Client")
 		fmt.Println(err)
 	}
-	tweet, resp, err := client.Statuses.Update("A Test Tweet", nil)
+	tweet, resp, err := client.Statuses.Update(stringToTweet, nil)
 	if err != nil {
 		fmt.Println(err)
 	}
 	fmt.Printf("%+v\n", resp)
 	fmt.Printf("%+v\n", tweet)
+}
+
+func main() {
+	getData()
+
 }
