@@ -4,8 +4,8 @@
 
 _Work in progress._
 
-This is a Go version of the existing python tweetbot, it is used more as a practice to get more familiar with Go and refactor in stages.
-Ultimate goal for this app is to get data from the Data Greek Gov website, format them and share a daily percantage in Twitter automatically.
+This is a Go version of a covid vaccination tracker/tweetbot in Greece https://twitter.com/emvolioGR.
+This app gets data from the Data Greek Gov website, formats them and shares a daily percantage in Twitter upon trigger (to do: add a cron job to post automatically).
 
 # Run locally
 

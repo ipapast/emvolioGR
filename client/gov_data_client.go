@@ -33,7 +33,7 @@ func getData() {
 	}
 	data := []byte(body)
 
-	jsonFile, _ := os.Create("vaccinations_regions.json")
+	jsonFile, _ := os.Create("../data/vaccinations_regions.json")
 	defer jsonFile.Close()
 
 	_, err2 := jsonFile.Write(data)
