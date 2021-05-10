@@ -1,6 +1,6 @@
 # emvolioGR
 
-[![Build Status](https://travis-ci.org/ipapast/emvolioGR.svg?branch=main)](https://travis-ci.org/ipapast/emvolioGR)
+![github check](https://github.com/ipapast/emvolioGR/actions/workflows/go.yml/badge.svg)
 
 _Work in progress._
 
