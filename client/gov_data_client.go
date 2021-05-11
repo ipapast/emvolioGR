@@ -12,7 +12,7 @@ import (
 
 )
 
-func getData() {
+func getCovidVaccinations() []byte {
 	url := "https://data.gov.gr/api/v1/query/mdg_emvolio"
 	gov_token := os.Getenv("GOV_DATA_TOKEN")
 
@@ -40,6 +40,9 @@ func getData() {
 	if err2 != nil {
 		fmt.Println(err2)
 	}
+	return data
+}
+func transformData(res []byte) {
 	type DataPerArea struct {
 		ReferenceDate        string `json:"referencedate"`
 		TotalVaccinations    int    `json:"totalvaccinations"`
@@ -49,7 +52,7 @@ func getData() {
 	type AllData []DataPerArea
 	var allData AllData
 
-	err = json.Unmarshal([]byte(body), &allData)
+	err := json.Unmarshal([]byte(res), &allData)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -91,5 +94,6 @@ func getData() {
 }
 
 func main() {
-	getData()
+	res := getCovidVaccinations()
+	transformData(res)
 }
