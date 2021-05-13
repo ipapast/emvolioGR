@@ -1,10 +1,9 @@
 name: Go
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  schedule:
+    # at 09:00 hrs everyday
+    - cron: '6 20 * * *'
 
 jobs:
 
@@ -23,3 +22,12 @@ jobs:
 
     - name: Test
       run: go test -v ./...
+    
+    - name: Post Tweets
+      run: go run -v ./...
+      env:
+          CI: true
+          TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
+          TWITTER_API_SECRET: ${{ secrets.TWITTER_API_SECRET }}
+          TWITTER_ACCESS_TOKEN_KEY: ${{ secrets.TWITTER_ACCESS_TOKEN_KEY }}
+          TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
