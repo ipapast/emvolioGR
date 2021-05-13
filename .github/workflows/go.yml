@@ -3,7 +3,7 @@ name: Go
 on:
   schedule:
     # at 09:00 hrs everyday
-    - cron: '6 20 * * *'
+    - cron: '7 20 * * *'
 
 jobs:
 
