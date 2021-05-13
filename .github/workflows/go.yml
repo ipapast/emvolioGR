@@ -3,7 +3,7 @@ name: Go build and post tweet
 on:
   schedule:
     # at 09:00 hrs everyday
-    - cron: '14 20 * * *'
+    - cron: '20 20 * * *'
 
 jobs:
 
@@ -31,3 +31,4 @@ jobs:
           TWITTER_API_SECRET: ${{ secrets.TWITTER_API_SECRET }}
           TWITTER_ACCESS_TOKEN_KEY: ${{ secrets.TWITTER_ACCESS_TOKEN_KEY }}
           TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
+          GOV_DATA_TOKEN: ${{ secrets.GOV_DATA_TOKEN }}
