@@ -20,17 +20,17 @@ type Credentials struct {
 func AddDataToTweet(dataValue float64, textValue string) string {
 	// bar_total is 15 and a new bar is every 6.67%
 	dataToAdd := ""
-	solid_bars_to_print := math.Round(dataValue / 6.67)
-	empty_bars_to_print := 15 - int(solid_bars_to_print)
+	solidBarsToPrint := math.Round(dataValue / 6.67)
+	emptyBarsToPrint := 15 - int(solidBarsToPrint)
 
 	dataToAdd += textValue
-	for solid_bars_to_print > 0 {
+	for solidBarsToPrint > 0 {
 		dataToAdd += "▓"
-		solid_bars_to_print -= 1
+		solidBarsToPrint -= 1
 	}
-	for empty_bars_to_print > 0 {
+	for emptyBarsToPrint > 0 {
 		dataToAdd += "░"
-		empty_bars_to_print -= 1
+		emptyBarsToPrint -= 1
 	}
 	dataToAdd += " " + fmt.Sprint(dataValue) + "%\n\n"
 	return dataToAdd
@@ -55,16 +55,16 @@ func SourceAndSendTweet(stringToTweet, language string) {
 }
 
 func sendTweet(stringToTweet string) {
-	creds := Credentials{
+	credentials := Credentials{
 		AccessToken:       os.Getenv("ACCESS_TOKEN"),
 		AccessTokenSecret: os.Getenv("ACCESS_TOKEN_SECRET"),
 		ConsumerKey:       os.Getenv("CONSUMER_KEY"),
 		ConsumerSecret:    os.Getenv("CONSUMER_SECRET"),
 	}
 
-	fmt.Printf("%+v\n", creds)
+	fmt.Printf("%+v\n", credentials)
 
-	client, err := getClient(&creds)
+	client, err := getClient(&credentials)
 	if err != nil {
 		fmt.Println("Error getting Twitter Client")
 		fmt.Println(err)
@@ -77,9 +77,9 @@ func sendTweet(stringToTweet string) {
 	fmt.Printf("%+v\n", tweet)
 }
 
-func getClient(creds *Credentials) (*twitter.Client, error) {
-	config := oauth1.NewConfig(creds.ConsumerKey, creds.ConsumerSecret)
-	token := oauth1.NewToken(creds.AccessToken, creds.AccessTokenSecret)
+func getClient(credentials *Credentials) (*twitter.Client, error) {
+	config := oauth1.NewConfig(credentials.ConsumerKey, credentials.ConsumerSecret)
+	token := oauth1.NewToken(credentials.AccessToken, credentials.AccessTokenSecret)
 
 	httpClient := config.Client(oauth1.NoContext, token)
 	client := twitter.NewClient(httpClient)

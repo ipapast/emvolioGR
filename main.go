@@ -14,9 +14,9 @@ import (
 
 func getCovidVaccinations() []byte {
 	url := "https://data.gov.gr/api/v1/query/mdg_emvolio"
-	gov_token := os.Getenv("GOV_DATA_TOKEN")
+	govToken := os.Getenv("GOV_DATA_TOKEN")
 
-	token := fmt.Sprint("Token ", gov_token)
+	token := fmt.Sprint("Token ", govToken)
 	req, err := http.NewRequest("GET", url, nil)
 
 	req.Header.Add("Authorization", token)
@@ -57,38 +57,38 @@ func transformData(res []byte) {
 		fmt.Println(err)
 	}
 
-	total_vacs := make(map[time.Time]int)
-	total_people_vac := make(map[time.Time]int)
-	total_people_vac_fully := make(map[time.Time]int)
-	population_of_gr := 8868536
-	var percentage_1st_dose []float64
-	var percentage_2nd_dose []float64
+	totalVacs := make(map[time.Time]int)
+	totalPeopleVac := make(map[time.Time]int)
+	totalPeopleVacFully := make(map[time.Time]int)
+	populationOfGr := 8868536
+	var percentage1stDose []float64
+	var percentage2ndDose []float64
 
 	for _, elem := range allData {
 		date := elem.ReferenceDate[0:10]
-		parsed_date, _ := time.Parse("2006-01-02", date)
-		total_vacs[parsed_date] += elem.TotalVaccinations
-		total_people_vac[parsed_date] += elem.TotalDistinctPersons
-		total_people_vac_fully[parsed_date] = total_vacs[parsed_date] - total_people_vac[parsed_date]
+		parsedDate, _ := time.Parse("2006-01-02", date)
+		totalVacs[parsedDate] += elem.TotalVaccinations
+		totalPeopleVac[parsedDate] += elem.TotalDistinctPersons
+		totalPeopleVacFully[parsedDate] = totalVacs[parsedDate] - totalPeopleVac[parsedDate]
 
-		perc := (float64(total_people_vac[parsed_date]) / float64(population_of_gr)) * 100
-		percentage_1st_dose = append(percentage_1st_dose, math.Round(perc*100)/100)
-		perc2 := (float64(total_people_vac_fully[parsed_date]) / float64(population_of_gr)) * 100
-		percentage_2nd_dose = append(percentage_2nd_dose, math.Round(perc2*100)/100)
+		percentage1st := (float64(totalPeopleVac[parsedDate]) / float64(populationOfGr)) * 100
+		percentage1stDose = append(percentage1stDose, math.Round(percentage1st*100)/100)
+		percantage2nd := (float64(totalPeopleVacFully[parsedDate]) / float64(populationOfGr)) * 100
+		percentage2ndDose = append(percentage2ndDose, math.Round(percantage2nd*100)/100)
 	}
 
-	sort.Slice(percentage_1st_dose, func(i, j int) bool { return percentage_1st_dose[i] < percentage_1st_dose[j] })
-	sort.Slice(percentage_2nd_dose, func(i, j int) bool { return percentage_2nd_dose[i] < percentage_2nd_dose[j] })
+	sort.Slice(percentage1stDose, func(i, j int) bool { return percentage1stDose[i] < percentage1stDose[j] })
+	sort.Slice(percentage2ndDose, func(i, j int) bool { return percentage2ndDose[i] < percentage2ndDose[j] })
 	// get last item
-	latest_1st_dose := percentage_1st_dose[len(percentage_1st_dose)-1]
-	latest_2nd_dose := percentage_2nd_dose[len(percentage_2nd_dose)-1]
+	latest1stDose := percentage1stDose[len(percentage1stDose)-1]
+	latest2ndDose := percentage2ndDose[len(percentage2ndDose)-1]
 
 	stringToTweet := ""
-	stringToTweet += client.AddDataToTweet(latest_1st_dose, "1st dose of vaccine progress in Greece: \n\n")
-	stringToTweet += client.AddDataToTweet(latest_2nd_dose, "2nd dose of vaccine progress in Greece: \n\n")
+	stringToTweet += client.AddDataToTweet(latest1stDose, "1st dose of vaccine progress in Greece: \n\n")
+	stringToTweet += client.AddDataToTweet(latest2ndDose, "2nd dose of vaccine progress in Greece: \n\n")
 	stringToTweetGR := ""
-	stringToTweetGR += client.AddDataToTweet(latest_1st_dose, "Ποσοστό ατόμων με 1η δόση εμβολίου: \n\n")
-	stringToTweetGR += client.AddDataToTweet(latest_2nd_dose, "Ποσοστό ατόμων με 2η δόση εμβολίου: \n\n")
+	stringToTweetGR += client.AddDataToTweet(latest1stDose, "Ποσοστό ατόμων με 1η δόση εμβολίου: \n\n")
+	stringToTweetGR += client.AddDataToTweet(latest2ndDose, "Ποσοστό ατόμων με 2η δόση εμβολίου: \n\n")
 	client.SourceAndSendTweet(stringToTweet, "en")
 	client.SourceAndSendTweet(stringToTweetGR, "gr")
 }
