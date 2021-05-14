@@ -1,10 +1,10 @@
-package main
+package client
 
 import (
 	"fmt"
 	"math"
-	"time"
 	"os"
+	"time"
 
 	"github.com/dghubble/go-twitter/twitter"
 	"github.com/dghubble/oauth1"
@@ -26,7 +26,7 @@ func AddDataToTweet(dataValue float64, textValue string) string {
 	dataToAdd += textValue
 	for solid_bars_to_print > 0 {
 		dataToAdd += "▓"
-		solid_bars_to_print -=1
+		solid_bars_to_print -= 1
 	}
 	for empty_bars_to_print > 0 {
 		dataToAdd += "░"
@@ -36,11 +36,11 @@ func AddDataToTweet(dataValue float64, textValue string) string {
 	return dataToAdd
 }
 
-func SourceAndSendTweet(stringToTweet, language string){
+func SourceAndSendTweet(stringToTweet, language string) {
 	now := time.Now()
 	date := fmt.Sprint(now.Format("02/01/2006"))
-	
-	if language == "en" {	
+
+	if language == "en" {
 		stringToTweet += "As of " + date + "\n"
 		stringToTweet += "With data from the GR Gov API\n"
 		stringToTweet += "#koronoios #covid19GR #CovidGR #emvolio #COVID19 #CoronavirusVaccine"
@@ -54,7 +54,7 @@ func SourceAndSendTweet(stringToTweet, language string){
 	sendTweet(stringToTweet)
 }
 
-func sendTweet(stringToTweet string){
+func sendTweet(stringToTweet string) {
 	creds := Credentials{
 		AccessToken:       os.Getenv("ACCESS_TOKEN"),
 		AccessTokenSecret: os.Getenv("ACCESS_TOKEN_SECRET"),
