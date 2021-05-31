@@ -36,7 +36,7 @@ func AddDataToTweet(dataValue float64, textValue string) string {
 	return dataToAdd
 }
 
-func SourceAndSendTweet(stringToTweet, language string) {
+func SourceAndSendTweet(stringToTweet string, language string) {
 	now := time.Now()
 	date := fmt.Sprint(now.Format("02/01/2006"))
 
@@ -67,7 +67,7 @@ func sendTweet(stringToTweet string) {
 	client, err := getClient(&credentials)
 	if err != nil {
 		fmt.Println("Error getting Twitter Client")
-		fmt.Println(err)
+		os.Exit(1)
 	}
 	tweet, resp, err := client.Statuses.Update(stringToTweet, nil)
 	if err != nil {
@@ -91,6 +91,7 @@ func getClient(credentials *Credentials) (*twitter.Client, error) {
 
 	user, _, err := client.Accounts.VerifyCredentials(verifyParams)
 	if err != nil {
+		fmt.Println("Could not verify Twitter credentials")
 		return nil, err
 	}
 

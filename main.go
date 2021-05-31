@@ -18,6 +18,9 @@ func getCovidVaccinations() []byte {
 
 	token := fmt.Sprint("Token ", govToken)
 	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		fmt.Println("Error on getting data from Gov GR.\n[ERROR] -", err)
+	}
 
 	req.Header.Add("Authorization", token)
 	client := &http.Client{}
