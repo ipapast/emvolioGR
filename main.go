@@ -35,13 +35,16 @@ func getCovidVaccinations() []byte {
 	if err != nil {
 		fmt.Println("Error while reading the response bytes:", err)
 	}
-	// writeToFile(body)
+	writeToFile(body)
 
 	return body
 }
 
 func writeToFile(body []byte) {
-	jsonFile, _ := os.Create("../data/vaccinations_regions.json")
+	jsonFile, err := os.Create("data/vaccinations_regions.json")
+	if err != nil {
+		fmt.Println("Could not write file to disk, error: ", err)
+	}
 	defer jsonFile.Close()
 
 	_, err2 := jsonFile.Write(body)
