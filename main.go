@@ -52,7 +52,8 @@ func transformData(res []byte) {
 		TotalDistinctPersons int    `json:"totaldistinctpersons"`
 	}
 
-	var allData []DataPerArea
+	type AllData []DataPerArea
+	var allData AllData
 
 	err := json.Unmarshal([]byte(res), &allData)
 	if err != nil {
