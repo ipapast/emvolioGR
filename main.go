@@ -35,23 +35,23 @@ func getCovidVaccinations() []byte {
 	if err != nil {
 		fmt.Println("Error while reading the response bytes:", err)
 	}
-	writeToFile(body)
+	// writeToFile(body)
 
 	return body
 }
 
-func writeToFile(body []byte) {
-	jsonFile, err := os.Create("data/vaccinations_regions.json")
-	if err != nil {
-		fmt.Println("Could not write file to disk, error: ", err)
-	}
-	defer jsonFile.Close()
+// func writeToFile(body []byte) {
+// 	jsonFile, err := os.Create("data/vaccinations_regions.json")
+// 	if err != nil {
+// 		fmt.Println("Could not write file to disk, error: ", err)
+// 	}
+// 	defer jsonFile.Close()
 
-	_, err2 := jsonFile.Write(body)
-	if err2 != nil {
-		fmt.Println(err2)
-	}
-}
+// 	_, err2 := jsonFile.Write(body)
+// 	if err2 != nil {
+// 		fmt.Println(err2)
+// 	}
+// }
 func transformData(res []byte) {
 	type DataPerArea struct {
 		ReferenceDate        string `json:"referencedate"`
@@ -64,7 +64,7 @@ func transformData(res []byte) {
 
 	err := json.Unmarshal((res), &allData)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("An error occured while unmarshalling data: ",err)
 	}
 
 	totalVacs := make(map[time.Time]int)
