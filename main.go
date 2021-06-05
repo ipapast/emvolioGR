@@ -3,13 +3,14 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/ipapast/emvolioGR/client"
 	"io/ioutil"
 	"math"
 	"net/http"
 	"os"
 	"sort"
 	"time"
+
+	"github.com/ipapast/emvolioGR/client"
 )
 
 func getCovidVaccinations() []byte {
@@ -34,16 +35,19 @@ func getCovidVaccinations() []byte {
 	if err != nil {
 		fmt.Println("Error while reading the response bytes:", err)
 	}
-	data := []byte(body)
+	// writeToFile(body)
 
+	return body
+}
+
+func writeToFile(body []byte) {
 	jsonFile, _ := os.Create("../data/vaccinations_regions.json")
 	defer jsonFile.Close()
 
-	_, err2 := jsonFile.Write(data)
+	_, err2 := jsonFile.Write(body)
 	if err2 != nil {
 		fmt.Println(err2)
 	}
-	return data
 }
 func transformData(res []byte) {
 	type DataPerArea struct {
@@ -55,7 +59,7 @@ func transformData(res []byte) {
 	type AllData []DataPerArea
 	var allData AllData
 
-	err := json.Unmarshal([]byte(res), &allData)
+	err := json.Unmarshal((res), &allData)
 	if err != nil {
 		fmt.Println(err)
 	}
