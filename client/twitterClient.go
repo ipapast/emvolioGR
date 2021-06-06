@@ -37,16 +37,17 @@ func AddDataToTweet(dataValue float64, textValue string) string {
 }
 
 func SourceAndSendTweet(stringToTweet string, language string) {
-	now := time.Now()
-	date := fmt.Sprint(now.Format("02/01/2006"))
+	// Github Action is getting triggered in the morning, when we have data available until yesterday
+	yesterday := time.Now().Add(-24*time.Hour)
+	yesterdayDate := fmt.Sprint(yesterday.Format("02/01/2006"))
 
 	if language == "en" {
-		stringToTweet += "As of " + date + "\n"
+		stringToTweet += "As of " + yesterdayDate + "\n"
 		stringToTweet += "With data from the GR Gov API\n"
 		stringToTweet += "#koronoios #covid19GR #CovidGR #emvolio #COVID19 #CoronavirusVaccine"
 		fmt.Println(stringToTweet)
 	} else {
-		stringToTweet += "Εώς " + date + "\n"
+		stringToTweet += "Εώς " + yesterdayDate + "\n"
 		stringToTweet += "Με δεδομένα από το GR Gov API \n"
 		stringToTweet += "#emvolio #covid #COVID19gr #κορονοϊός #εμβόλιο #εμβολιασμος #κορωνοιος"
 		fmt.Println(stringToTweet)
