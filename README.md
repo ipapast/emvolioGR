@@ -11,5 +11,4 @@ This app gets data from the [Data Gov GR website](https://data.gov.gr/datasets/m
 
 # Run locally
 
-- `go build`
-- ```go run ./.```
+- ```go run .```
