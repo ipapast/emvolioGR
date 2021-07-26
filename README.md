@@ -1,5 +1,6 @@
 # emvolioGR
 
+![SNYK](https://github.com/ipapast/emvolioGR/actions/workflows/snyk-security.yml/badge.svg)
 ![github check](https://github.com/ipapast/emvolioGR/actions/workflows/go.yml/badge.svg) [![CodeQL](https://github.com/ipapast/emvolioGR/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/ipapast/emvolioGR/actions/workflows/codeql-analysis.yml) [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
 
 
