@@ -1,6 +1,8 @@
 name: "Snyk Golang"
-description: "Check your Golang application for vulnerabilties using Snyk"
-author: "Gareth Rushgrove"
+  on:
+  push:
+  workflow_dispatch:
+  
 branding:
   icon: "alert-triangle"
   color: "yellow"
