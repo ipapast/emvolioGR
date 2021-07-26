@@ -2,26 +2,18 @@ name: "Snyk Golang"
 on:
   push:
   workflow_dispatch:
-  
-branding:
-  icon: "alert-triangle"
-  color: "yellow"
-inputs:
-  command:
-    description: "Which Snyk command to run, defaults to test"
-    default: test
-  args:
-    description: "Additional arguments to pass to Snyk"
-  json:
-    description: "Output a snyk.json file with results if running the test command"
-    default: false
-runs:
-  using: "docker"
-  image: "docker://snyk/snyk:golang"
-  env:
-    SNYK_INTEGRATION_NAME: GITHUB_ACTIONS
-    SNYK_INTEGRATION_VERSION: golang
-  args:
-  - snyk
-  - ${{ inputs.command }}
-  - ${{ inputs.args }} 
+jobs:
+  snyk:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run Snyk to check Terraform configuration file for issues
+      continue-on-error: true
+      uses: snyk/actions/golang@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        file: .
+    - uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: snyk.sarif
