@@ -1,5 +1,5 @@
 name: "Snyk Golang"
-  on:
+on:
   push:
   workflow_dispatch:
   
