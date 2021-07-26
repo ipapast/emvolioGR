@@ -99,7 +99,7 @@ func transformData(res []byte) {
 	stringToTweetGR := ""
 	stringToTweetGR += client.AddDataToTweet(latest1stDose, "Ποσοστό ατόμων με 1η δόση εμβολίου: \n\n")
 	stringToTweetGR += client.AddDataToTweet(latest2ndDose, "Ποσοστό ατόμων με 2η δόση εμβολίου: \n\n")
-	client.SourceAndSendTweet(stringToTweet, "en")
+	// client.SourceAndSendTweet(stringToTweet, "en")
 	client.SourceAndSendTweet(stringToTweetGR, "gr")
 }
 
