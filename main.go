@@ -64,7 +64,7 @@ func transformData(res []byte) {
 
 	err := json.Unmarshal((res), &allData)
 	if err != nil {
-		fmt.Println("An error occured while unmarshalling data: ",err)
+		fmt.Println("An error occurred while unmarshalling data: ",err)
 	}
 
 	totalVacs := make(map[time.Time]int)
