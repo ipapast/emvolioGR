@@ -70,7 +70,7 @@ func transformData(res []byte) {
 	totalVacs := make(map[time.Time]int)
 	totalPeopleVac := make(map[time.Time]int)
 	totalPeopleVacFully := make(map[time.Time]int)
-	populationOfGr := os.Getenv("POPULATION_GR")
+	populationOfGr, _ := strconv.ParseFloat(os.Getenv("POPULATION_GR"), 64)
 // 	adultPopulationOfGr := os.Getenv("ADULT_POPULATION_GR")
 	var percentage1stDose []float64
 	var percentage2ndDose []float64
