@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"sort"
+	"strconv"
 	"time"
 
 	"github.com/ipapast/emvolioGR/client"
@@ -64,14 +65,14 @@ func transformData(res []byte) {
 
 	err := json.Unmarshal((res), &allData)
 	if err != nil {
-		fmt.Println("An error occurred while unmarshalling data: ",err)
+		fmt.Println("An error occurred while unmarshalling data: ", err)
 	}
 
 	totalVacs := make(map[time.Time]int)
 	totalPeopleVac := make(map[time.Time]int)
 	totalPeopleVacFully := make(map[time.Time]int)
 	populationOfGr, _ := strconv.ParseFloat(os.Getenv("POPULATION_GR"), 64)
-// 	adultPopulationOfGr := os.Getenv("ADULT_POPULATION_GR")
+	// 	adultPopulationOfGr := os.Getenv("ADULT_POPULATION_GR")
 	var percentage1stDose []float64
 	var percentage2ndDose []float64
 
@@ -94,9 +95,9 @@ func transformData(res []byte) {
 	latest1stDose := percentage1stDose[len(percentage1stDose)-1]
 	latest2ndDose := percentage2ndDose[len(percentage2ndDose)-1]
 
-	stringToTweet := ""
-	stringToTweet += client.AddDataToTweet(latest1stDose, "1st dose of vaccine progress in Greece: \n\n")
-	stringToTweet += client.AddDataToTweet(latest2ndDose, "2nd dose of vaccine progress in Greece: \n\n")
+	//stringToTweet := ""
+	//stringToTweet += client.AddDataToTweet(latest1stDose, "1st dose of vaccine progress in Greece: \n\n")
+	//stringToTweet += client.AddDataToTweet(latest2ndDose, "2nd dose of vaccine progress in Greece: \n\n")
 	stringToTweetGR := ""
 	stringToTweetGR += client.AddDataToTweet(latest1stDose, "Ποσοστό ατόμων με 1η δόση εμβολίου: \n\n")
 	stringToTweetGR += client.AddDataToTweet(latest2ndDose, "Ποσοστό ατόμων με 2η δόση εμβολίου: \n\n")

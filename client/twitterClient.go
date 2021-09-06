@@ -38,7 +38,7 @@ func AddDataToTweet(dataValue float64, textValue string) string {
 
 func SourceAndSendTweet(stringToTweet string, language string) {
 	// Github Action is getting triggered in the morning, when we have data available until yesterday
-	yesterday := time.Now().Add(-24*time.Hour)
+	yesterday := time.Now().Add(-24 * time.Hour)
 	yesterdayDate := fmt.Sprint(yesterday.Format("02/01/2006"))
 
 	if language == "en" {
@@ -92,7 +92,7 @@ func getClient(credentials *Credentials) (*twitter.Client, error) {
 
 	user, _, err := client.Accounts.VerifyCredentials(verifyParams)
 	if err != nil {
-		fmt.Println("Could not verify Twitter credentials")
+		fmt.Println("Could not verify Twitter Credentials")
 		return nil, err
 	}
 
