@@ -70,7 +70,8 @@ func transformData(res []byte) {
 	totalVacs := make(map[time.Time]int)
 	totalPeopleVac := make(map[time.Time]int)
 	totalPeopleVacFully := make(map[time.Time]int)
-	populationOfGr := 8868536
+	populationOfGr := 10423054
+// 	adultPopulationOfGr := 8868536
 	var percentage1stDose []float64
 	var percentage2ndDose []float64
 
