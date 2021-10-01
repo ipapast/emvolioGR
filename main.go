@@ -94,9 +94,9 @@ func transformData(res []byte) {
 	latest1stDose := percentage1stDose[len(percentage1stDose)-1]
 	latest2ndDose := percentage2ndDose[len(percentage2ndDose)-1]
 
-	stringToTweet := ""
-	stringToTweet += client.AddDataToTweet(latest1stDose, "1st dose of vaccine progress in Greece: \n\n")
-	stringToTweet += client.AddDataToTweet(latest2ndDose, "2nd dose of vaccine progress in Greece: \n\n")
+// 	stringToTweet := ""
+// 	stringToTweet += client.AddDataToTweet(latest1stDose, "1st dose of vaccine progress in Greece: \n\n")
+// 	stringToTweet += client.AddDataToTweet(latest2ndDose, "2nd dose of vaccine progress in Greece: \n\n")
 	stringToTweetGR := ""
 	stringToTweetGR += client.AddDataToTweet(latest1stDose, "Ποσοστό ατόμων με 1η δόση εμβολίου: \n\n")
 	stringToTweetGR += client.AddDataToTweet(latest2ndDose, "Ποσοστό ατόμων με 2η δόση εμβολίου: \n\n")
